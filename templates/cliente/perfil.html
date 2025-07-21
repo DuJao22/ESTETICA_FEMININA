@@ -1,0 +1,86 @@
+{% extends "cliente/base.html" %}
+
+{% block title %}Meu Perfil - {{ config[0] }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+        <div class="bg-white rounded-2xl shadow-lg p-8">
+            <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">Meu Perfil</h1>
+            
+            <form method="POST" enctype="multipart/form-data" class="space-y-6">
+                <!-- Foto de perfil -->
+                <div class="text-center">
+                    <div class="relative inline-block">
+                        <img src="/uploads/{{ cliente[3] }}" alt="Foto de perfil" 
+                             class="w-32 h-32 rounded-full object-cover border-4 border-blue-100 mx-auto">
+                        <label for="foto" class="absolute bottom-0 right-0 bg-blue-500 text-white p-2 rounded-full cursor-pointer hover:bg-blue-600">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                        </label>
+                        <input type="file" id="foto" name="foto" accept="image/*" class="hidden">
+                    </div>
+                    <p class="text-sm text-gray-500 mt-2">Clique no ícone para alterar sua foto</p>
+                </div>
+                
+                <!-- Informações pessoais -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="nome" class="block text-sm font-medium text-gray-700 mb-2">Nome Completo</label>
+                        <input type="text" name="nome" id="nome" value="{{ cliente[0] }}" required 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    
+                    <div>
+                        <label for="telefone" class="block text-sm font-medium text-gray-700 mb-2">Telefone</label>
+                        <input type="tel" name="telefone" id="telefone" value="{{ cliente[2] or '' }}" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                               placeholder="(11) 99999-9999">
+                    </div>
+                </div>
+                
+                <!-- E-mail (somente leitura) -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">E-mail</label>
+                    <input type="email" value="{{ cliente[1] }}" readonly 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500">
+                    <p class="text-sm text-gray-500 mt-1">O e-mail não pode ser alterado</p>
+                </div>
+                
+                <!-- Alterar senha -->
+                <div>
+                    <label for="nova_senha" class="block text-sm font-medium text-gray-700 mb-2">Nova Senha (opcional)</label>
+                    <input type="password" name="nova_senha" id="nova_senha" 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                           placeholder="Digite uma nova senha se desejar alterar">
+                    <p class="text-sm text-gray-500 mt-1">Deixe em branco para manter a senha atual</p>
+                </div>
+                
+                <!-- Estatísticas -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-6 border-t border-gray-200">
+                    <div class="text-center p-4 bg-blue-50 rounded-lg">
+                        <p class="text-2xl font-bold text-blue-600">{{ cliente[4] }}</p>
+                        <p class="text-sm text-gray-600">Visitas</p>
+                    </div>
+                    
+                    <div class="text-center p-4 bg-green-50 rounded-lg">
+                        <p class="text-2xl font-bold text-green-600">R$ {{ "%.2f"|format(cliente[5]) }}</p>
+                        <p class="text-sm text-gray-600">Total Gasto</p>
+                    </div>
+                    
+                    <div class="text-center p-4 bg-purple-50 rounded-lg">
+                        <p class="text-sm font-bold text-purple-600">{{ cliente[6] }}</p>
+                        <p class="text-sm text-gray-600">Cliente desde</p>
+                    </div>
+                </div>
+                
+                <button type="submit" class="w-full btn-primary text-white py-3 rounded-lg font-semibold">
+                    Salvar Alterações
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

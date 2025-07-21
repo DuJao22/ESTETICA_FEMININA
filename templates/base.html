@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ config[0] }}{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #4F46E5 0%, #7C3AED 100%);
+            height: 8px;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .sidebar-link {
+            transition: all 0.2s ease;
+        }
+        
+        .sidebar-link:hover {
+            background-color: rgba(255,255,255,0.1);
+            transform: translateX(4px);
+        }
+        
+        .sidebar-link.active {
+            background: rgba(255,255,255,0.2);
+            border-left: 4px solid #60A5FA;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .dashboard-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+        
+        .alert {
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            border-left: 4px solid;
+        }
+        
+        .alert-success {
+            background-color: #ecfdf5;
+            border-color: #10b981;
+            color: #065f46;
+        }
+        
+        .alert-error {
+            background-color: #fef2f2;
+            border-color: #ef4444;
+            color: #991b1b;
+        }
+        
+        .chart-bar {
+            background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .chart-bar:hover {
+            transform: scaleY(1.05);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        {% if session.usuario_id %}
+        <div class="w-64 gradient-bg text-white flex-shrink-0">
+            <div class="p-6">
+                <h1 class="text-xl font-bold">{{ config[0] }}</h1>
+                <p class="text-sm opacity-75">{{ session.especialidade or 'Sistema de Gestão' }}</p>
+            </div>
+            
+            <nav class="mt-8">
+                <a href="{{ url_for('dashboard') }}" class="sidebar-link flex items-center px-6 py-3 text-white {% if request.endpoint == 'dashboard' %}active{% endif %}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                    </svg>
+                    Dashboard
+                </a>
+                
+                <a href="{{ url_for('agendamentos') }}" class="sidebar-link flex items-center px-6 py-3 text-white {% if request.endpoint == 'agendamentos' %}active{% endif %}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    Agendamentos
+                </a>
+                
+                <a href="{{ url_for('clientes') }}" class="sidebar-link flex items-center px-6 py-3 text-white {% if request.endpoint == 'clientes' %}active{% endif %}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                    </svg>
+                    Clientes
+                </a>
+                
+                {% if session.tipo_usuario == 'administrador' %}
+                <a href="{{ url_for('funcionarios') }}" class="sidebar-link flex items-center px-6 py-3 text-white {% if request.endpoint == 'funcionarios' %}active{% endif %}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                    Funcionários
+                </a>
+                {% endif %}
+                
+                <a href="{{ url_for('relatorios') }}" class="sidebar-link flex items-center px-6 py-3 text-white {% if request.endpoint == 'relatorios' %}active{% endif %}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                    </svg>
+                    Relatórios
+                </a>
+                
+                {% if session.tipo_usuario == 'administrador' %}
+                <a href="{{ url_for('promocoes') }}" class="sidebar-link flex items-center px-6 py-3 text-white {% if request.endpoint == 'promocoes' %}active{% endif %}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2h3a1 1 0 011 1v1a1 1 0 01-1 1h-1v10a2 2 0 01-2 2H7a2 2 0 01-2-2V7H4a1 1 0 01-1-1V5a1 1 0 011-1h3z"></path>
+                    </svg>
+                    Promoções
+                </a>
+                
+                <a href="{{ url_for('configuracoes') }}" class="sidebar-link flex items-center px-6 py-3 text-white {% if request.endpoint == 'configuracoes' %}active{% endif %}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    Configurações
+                </a>
+                {% endif %}
+            </nav>
+            
+            <div class="absolute bottom-0 w-64 p-6">
+                <div class="border-t border-white border-opacity-20 pt-4">
+                    <p class="text-sm opacity-75">{{ session.nome_usuario }}</p>
+                    <a href="{{ url_for('logout') }}" class="text-sm text-red-200 hover:text-white">Sair</a>
+                </div>
+                <div class="mt-4">
+                    <a href="{{ url_for('creditos') }}" class="text-xs opacity-60 hover:opacity-100">Créditos do Sistema</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Conteúdo principal -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Header -->
+            {% if session.usuario_id %}
+            <header class="bg-white shadow-sm border-b border-gray-200">
+                <div class="px-6 py-4">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-2xl font-semibold text-gray-800">{% block header %}Dashboard{% endblock %}</h2>
+                        <div class="flex items-center space-x-4">
+                            <span class="text-sm text-gray-600">{{ session.nome_usuario }}</span>
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">{{ session.tipo_usuario.title() }}</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            {% endif %}
+            
+            <!-- Área de conteúdo -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50">
+                <div class="container mx-auto px-6 py-8">
+                    <!-- Alertas -->
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-success mb-4">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                    
+                    {% block content %}{% endblock %}
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+</html>

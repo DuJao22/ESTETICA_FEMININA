@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block title %}Créditos - {{ config[0] }}{% endblock %}
+{% block header %}Créditos do Sistema{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-8">
+    <!-- Banner principal -->
+    <div class="text-center bg-gradient-to-r from-blue-600 to-purple-600 text-white p-12 rounded-2xl">
+        <h1 class="text-4xl font-bold mb-4">Sistema de Gestão para Salões de Beleza</h1>
+        <p class="text-xl opacity-90">Solução completa e profissional desenvolvida com tecnologias modernas</p>
+    </div>
+    
+    <!-- Desenvolvedor -->
+    <div class="dashboard-card p-8">
+        <div class="text-center">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Sistema desenvolvido por</h2>
+            <div class="w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span class="text-2xl font-bold text-white">JL</span>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">João Layon</h3>
+            <p class="text-gray-600 mb-6">Desenvolvedor Full Stack especialista em sistemas web</p>
+            
+            <button onclick="document.getElementById('contato-modal').style.display='flex'" 
+                    class="btn-primary text-white px-8 py-3 rounded-lg hover:shadow-lg transition-all">
+                Contate-me para orçamento
+            </button>
+        </div>
+    </div>
+    
+    <!-- Tecnologias utilizadas -->
+    <div class="dashboard-card p-8">
+        <h3 class="text-xl font-semibold text-gray-800 mb-6 text-center">Tecnologias Utilizadas</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div class="text-center p-4 bg-gray-50 rounded-lg">
+                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                    <span class="text-blue-600 font-bold">PY</span>
+                </div>
+                <h4 class="font-medium text-gray-800">Python Flask</h4>
+                <p class="text-sm text-gray-600">Backend robusto</p>
+            </div>
+            
+            <div class="text-center p-4 bg-gray-50 rounded-lg">
+                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                    <span class="text-green-600 font-bold">DB</span>
+                </div>
+                <h4 class="font-medium text-gray-800">SQLite3</h4>
+                <p class="text-sm text-gray-600">Banco de dados</p>
+            </div>
+            
+            <div class="text-center p-4 bg-gray-50 rounded-lg">
+                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                    <span class="text-purple-600 font-bold">TW</span>
+                </div>
+                <h4 class="font-medium text-gray-800">TailwindCSS</h4>
+                <p class="text-sm text-gray-600">Design moderno</p>
+            </div>
+            
+            <div class="text-center p-4 bg-gray-50 rounded-lg">
+                <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                    <span class="text-orange-600 font-bold">J2</span>
+                </div>
+                <h4 class="font-medium text-gray-800">Jinja2</h4>
+                <p class="text-sm text-gray-600">Templates dinâmicos</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recursos do sistema -->
+    <div class="dashboard-card p-8">
+        <h3 class="text-xl font-semibold text-gray-800 mb-6 text-center">Recursos Implementados</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-3">
+                <h4 class="font-semibold text-gray-700">Gestão Completa</h4>
+                <ul class="space-y-2 text-sm text-gray-600">
+                    <li class="flex items-center">
+                        <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        Sistema de agendamentos
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        Cadastro de clientes
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        Gestão de funcionários
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        Controle de comissões
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="space-y-3">
+                <h4 class="font-semibold text-gray-700">Recursos Avançados</h4>
+                <ul class="space-y-2 text-sm text-gray-600">
+                    <li class="flex items-center">
+                        <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        Dashboard estilo PowerBI
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        Sistema de promoções
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        Relatórios detalhados
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7-293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        Design responsivo
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de contato -->
+<div id="contato-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white p-8 rounded-2xl max-w-md w-full m-4">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-semibold text-gray-800">Entre em Contato</h3>
+            <button onclick="document.getElementById('contato-modal').style.display='none'" class="text-gray-400 hover:text-gray-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        
+        <form method="POST" action="{{ url_for('contato') }}" class="space-y-4">
+            <div>
+                <label for="nome" class="block text-sm font-medium text-gray-700 mb-2">Nome</label>
+                <input type="text" name="nome" id="nome" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-2">E-mail</label>
+                <input type="email" name="email" id="email" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            
+            <div>
+                <label for="mensagem" class="block text-sm font-medium text-gray-700 mb-2">Mensagem</label>
+                <textarea name="mensagem" id="mensagem" rows="4" required placeholder="Descreva seu projeto ou necessidade..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+            </div>
+            
+            <button type="submit" class="w-full btn-primary text-white py-3 rounded-lg hover:shadow-lg transition-all">
+                Enviar Mensagem
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

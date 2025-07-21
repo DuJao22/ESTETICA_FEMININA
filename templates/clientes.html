@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Clientes - {{ config[0] }}{% endblock %}
+{% block header %}Gestão de Clientes{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Formulário de novo cliente -->
+    <div class="dashboard-card p-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-6">Novo Cliente</h3>
+        <form method="POST" action="{{ url_for('novo_cliente') }}" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+                <label for="nome" class="block text-sm font-medium text-gray-700 mb-2">Nome Completo</label>
+                <input type="text" name="nome" id="nome" required placeholder="Digite o nome completo" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            
+            <div>
+                <label for="telefone" class="block text-sm font-medium text-gray-700 mb-2">Telefone</label>
+                <input type="tel" name="telefone" id="telefone" placeholder="(11) 99999-9999" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-2">E-mail</label>
+                <input type="email" name="email" id="email" placeholder="cliente@email.com" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            
+            <div class="md:col-span-3">
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <p class="text-blue-800 text-sm">
+                        <strong>Nota:</strong> Clientes cadastrados pelo admin recebem a senha temporária: <code class="bg-blue-100 px-2 py-1 rounded">cliente123</code>
+                        <br>O cliente pode alterar a senha após fazer login na área do cliente.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="md:col-span-3">
+                <button type="submit" class="btn-primary text-white px-6 py-2 rounded-lg hover:shadow-lg transition-all">
+                    Cadastrar Cliente
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Lista de clientes -->
+    <div class="dashboard-card p-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-6">Lista de Clientes</h3>
+        {% if clientes %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% for cliente_id, nome, telefone, email, ultima_visita, total_visitas, total_gasto in clientes %}
+            <div class="bg-gray-50 p-4 rounded-lg card-hover">
+                <div class="flex items-center justify-between mb-3">
+                    <h4 class="font-semibold text-gray-800">{{ nome }}</h4>
+                    {% if total_visitas >= 5 %}
+                    <span class="px-2 py-1 bg-gold-100 bg-yellow-100 text-yellow-800 text-xs rounded-full">VIP</span>
+                    {% endif %}
+                </div>
+                
+                <div class="space-y-2 text-sm text-gray-600">
+                    {% if telefone %}
+                    <p><span class="font-medium">Telefone:</span> {{ telefone }}</p>
+                    {% endif %}
+                    {% if email %}
+                    <p><span class="font-medium">E-mail:</span> {{ email }}</p>
+                    {% endif %}
+                    {% if ultima_visita %}
+                    <p><span class="font-medium">Última visita:</span> {{ ultima_visita }}</p>
+                    {% endif %}
+                </div>
+                
+                <div class="mt-4 pt-3 border-t border-gray-200">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-600">{{ total_visitas }} visitas</span>
+                        <span class="font-medium text-green-600">R$ {{ "%.2f"|format(total_gasto) }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-12">
+            <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+            </svg>
+            <p class="text-gray-500">Nenhum cliente cadastrado</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

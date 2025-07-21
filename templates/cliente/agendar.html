@@ -1,0 +1,148 @@
+{% extends "cliente/base.html" %}
+
+{% block title %}Agendar Serviço - {{ config[0] }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+        <div class="bg-white rounded-2xl shadow-lg p-8">
+            <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">Agendar Serviço</h1>
+            
+            <form method="POST" class="space-y-6">
+                <!-- Escolher profissional -->
+                <div>
+                    <label for="funcionario_id" class="block text-sm font-medium text-gray-700 mb-3">Escolha o Profissional</label>
+                    <div class="grid grid-cols-1 gap-4">
+                        {% for funcionario_id, nome, especialidade, foto_perfil, descricao, horario_inicio, horario_fim in funcionarios %}
+                        <label class="cursor-pointer">
+                            <input type="radio" name="funcionario_id" value="{{ funcionario_id }}" required class="sr-only peer">
+                            <div class="border-2 border-gray-200 rounded-lg p-4 peer-checked:border-blue-500 peer-checked:bg-blue-50 hover:border-gray-300 transition-all">
+                                <div class="flex items-center space-x-4">
+                                    <img src="/uploads/{{ foto_perfil }}" alt="{{ nome }}" class="w-16 h-16 rounded-full object-cover">
+                                    <div class="flex-1">
+                                        <h3 class="font-semibold text-gray-800">{{ nome }}</h3>
+                                        <p class="text-blue-600 text-sm">{{ especialidade }}</p>
+                                        {% if descricao %}
+                                        <p class="text-gray-600 text-sm">{{ descricao }}</p>
+                                        {% endif %}
+                                        <p class="text-gray-500 text-xs">Horário: {{ horario_inicio }} às {{ horario_fim }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <!-- Data -->
+                <div>
+                    <label for="data" class="block text-sm font-medium text-gray-700 mb-2">Data do Agendamento</label>
+                    <input type="date" name="data" id="data" required min="{{ datetime.now().strftime('%Y-%m-%d') }}"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                
+                <!-- Horário -->
+                <div>
+                    <label for="horario" class="block text-sm font-medium text-gray-700 mb-2">Horário</label>
+                    <select name="horario" id="horario" required 
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">Primeiro selecione o profissional e a data</option>
+                    </select>
+                </div>
+                
+                <!-- Serviço -->
+                <div>
+                    <label for="servico" class="block text-sm font-medium text-gray-700 mb-2">Tipo de Serviço</label>
+                    <input type="text" name="servico" id="servico" required 
+                           placeholder="Ex: Corte feminino, Coloração, Manicure..."
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                
+                <!-- Valor -->
+                <div>
+                    <label for="valor" class="block text-sm font-medium text-gray-700 mb-2">Valor do Serviço (R$)</label>
+                    <input type="number" name="valor" id="valor" step="0.01" min="0" required 
+                           placeholder="0,00"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                
+                <!-- Informações do sinal -->
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <h3 class="font-semibold text-yellow-800 mb-2">💰 Informações de Pagamento</h3>
+                    <p class="text-yellow-700 text-sm">
+                        Para confirmar seu agendamento, é necessário o pagamento de um sinal de <strong>35%</strong> do valor total.
+                        Após o agendamento, você receberá as instruções para pagamento.
+                    </p>
+                </div>
+                
+                <button type="submit" class="w-full btn-primary text-white py-3 rounded-lg font-semibold">
+                    Agendar Serviço
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Atualizar horários disponíveis quando profissional ou data mudarem
+    function atualizarHorarios() {
+        const funcionarioId = document.querySelector('input[name="funcionario_id"]:checked')?.value;
+        const data = document.getElementById('data').value;
+        const horarioSelect = document.getElementById('horario');
+        
+        if (!funcionarioId || !data) {
+            horarioSelect.innerHTML = '<option value="">Selecione o profissional e a data</option>';
+            return;
+        }
+        
+        // Buscar horários disponíveis
+        fetch(`/api/horarios_disponiveis?funcionario_id=${funcionarioId}&data=${data}`)
+            .then(response => response.json())
+            .then(horarios => {
+                horarioSelect.innerHTML = '';
+                
+                if (horarios.length === 0) {
+                    horarioSelect.innerHTML = '<option value="">Nenhum horário disponível</option>';
+                } else {
+                    horarios.forEach(horario => {
+                        const option = document.createElement('option');
+                        option.value = horario;
+                        option.textContent = horario;
+                        horarioSelect.appendChild(option);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao buscar horários:', error);
+                horarioSelect.innerHTML = '<option value="">Erro ao carregar horários</option>';
+            });
+    }
+    
+    // Event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+        // Profissional selecionado
+        document.querySelectorAll('input[name="funcionario_id"]').forEach(radio => {
+            radio.addEventListener('change', atualizarHorarios);
+        });
+        
+        // Data selecionada
+        document.getElementById('data').addEventListener('change', atualizarHorarios);
+        
+        // Calcular sinal automaticamente
+        document.getElementById('valor').addEventListener('input', function() {
+            const valor = parseFloat(this.value) || 0;
+            const sinal = valor * 0.35;
+            
+            // Atualizar texto informativo
+            const infoDiv = document.querySelector('.bg-yellow-50 p');
+            if (valor > 0) {
+                infoDiv.innerHTML = `
+                    Para confirmar seu agendamento, é necessário o pagamento de um sinal de <strong>35%</strong> do valor total.<br>
+                    <strong>Valor do sinal: R$ ${sinal.toFixed(2)}</strong><br>
+                    Após o agendamento, você receberá as instruções para pagamento.
+                `;
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Promoções - {{ config[0] }}{% endblock %}
+{% block header %}Sistema de Promoções{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Formulário de nova promoção -->
+    <div class="dashboard-card p-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-6">Nova Promoção</h3>
+        <form method="POST" action="{{ url_for('enviar_promocao') }}" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="cliente_id" class="block text-sm font-medium text-gray-700 mb-2">Cliente VIP</label>
+                    <select name="cliente_id" id="cliente_id" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">Selecione um cliente VIP</option>
+                        {% for cliente_id, nome, telefone, total_visitas, total_gasto in clientes_fieis %}
+                        <option value="{{ cliente_id }}">{{ nome }} ({{ total_visitas }} visitas - R$ {{ "%.2f"|format(total_gasto) }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <div>
+                <label for="mensagem" class="block text-sm font-medium text-gray-700 mb-2">Mensagem da Promoção</label>
+                <textarea name="mensagem" id="mensagem" rows="4" required placeholder="Digite a mensagem promocional..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+            </div>
+            
+            <button type="submit" class="btn-primary text-white px-6 py-2 rounded-lg hover:shadow-lg transition-all">
+                Enviar Promoção
+            </button>
+        </form>
+    </div>
+    
+    <!-- Clientes VIP -->
+    <div class="dashboard-card p-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-6">Clientes VIP (5+ visitas)</h3>
+        {% if clientes_fieis %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% for cliente_id, nome, telefone, total_visitas, total_gasto in clientes_fieis %}
+            <div class="bg-gradient-to-r from-yellow-50 to-orange-50 p-4 rounded-lg border border-yellow-200">
+                <div class="flex items-center justify-between mb-2">
+                    <h4 class="font-semibold text-gray-800">{{ nome }}</h4>
+                    <span class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full font-medium">VIP</span>
+                </div>
+                
+                <div class="space-y-1 text-sm text-gray-600">
+                    {% if telefone %}
+                    <p><span class="font-medium">Telefone:</span> {{ telefone }}</p>
+                    {% endif %}
+                    <p><span class="font-medium">Visitas:</span> {{ total_visitas }}</p>
+                    <p><span class="font-medium">Total gasto:</span> R$ {{ "%.2f"|format(total_gasto) }}</p>
+                </div>
+                
+                <div class="mt-3">
+                    <div class="w-full h-2 bg-yellow-200 rounded-full">
+                        <div class="chart-bar h-2 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400" style="width: {{ (total_visitas / 20 * 100) if total_visitas <= 20 else 100 }}%"></div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">Nível de fidelidade</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-gray-500 text-center py-8">Ainda não há clientes VIP</p>
+        {% endif %}
+    </div>
+    
+    <!-- Histórico de promoções -->
+    <div class="dashboard-card p-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-6">Promoções Enviadas</h3>
+        {% if promocoes_enviadas %}
+        <div class="space-y-4">
+            {% for promocao_id, nome_cliente, mensagem, data_criacao, status in promocoes_enviadas %}
+            <div class="p-4 bg-gray-50 rounded-lg">
+                <div class="flex items-center justify-between mb-2">
+                    <h4 class="font-medium text-gray-800">{{ nome_cliente }}</h4>
+                    <span class="text-sm text-gray-500">{{ data_criacao }}</span>
+                </div>
+                <p class="text-sm text-gray-600 mb-2">{{ mensagem }}</p>
+                <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">{{ status.title() }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-gray-500 text-center py-8">Nenhuma promoção enviada ainda</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

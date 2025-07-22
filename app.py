@@ -146,7 +146,7 @@ def inicializar_banco():
         cursor.execute('''
             INSERT INTO usuarios (nome, login, senha, tipo_usuario, especialidade)
             VALUES (?, ?, ?, ?, ?)
-        ''', ('Administrador', 'admin', senha_hash, 'administrador', 'Gestão Geral'))
+        ''', ('Administrador', 'admin@salon.com', senha_hash, 'administrador', 'Gestão Geral'))
     
     # Inserir configuração inicial
     cursor.execute("SELECT COUNT(*) FROM configuracoes")
